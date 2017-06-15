@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pp.paralell;
+package pp.nonParalell;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -13,40 +13,39 @@ import java.util.ArrayList;
  *
  * @author tjurnicek
  */
-public class paralell {
+public class nonParalell {
 
-    static ArrayList<String> results = new ArrayList<String>();
+    static ArrayList<String> results = new ArrayList<String>(); //Arraylist urceny pro ulozeni vsech kombinaci hesla
     static String heslo = ""; //nase tajne heslo, ktere chceme prolomit
     char[] znaky = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
     int maxDelka = 0;
 
     public static void main(String[] args) {
-        paralell b = new paralell(5, "ppcc");
-        System.out.println("Nase tajne heslo je " + heslo + " s hashem " + MD5(heslo));
 
+        nonParalell b = new nonParalell(5, "cccc"); //konfigurace - zadavame max. delku retezce a heslo
+        
         System.out.println("V tomto nastaveni existuje " + results.size() + " kombinaci");
-        int cores = 4; //pocet vlaken
 
-        int velikostMnoz = results.size() / cores;
+        System.out.println("Nase tajne heslo je " + heslo + " s hashem " + MD5(heslo));
+       
+        long start = System.currentTimeMillis();
 
-        ArrayList<String>[] outer = new ArrayList[cores];
-        Vlakno[] vlakna = new Vlakno[cores];
+        b.zpracuj(results);
 
-        int zacMnoz = 0; //zac nastaven na 0 pro prvni mnozinu
-        int konMnoz = velikostMnoz; //konec nastaven na velikost mnoziny
-        for (int i = 0; i < cores; i++) { // cyklus vytvari pole poli podle poctu jader
-            outer[i] = new ArrayList<String>();
+        long end = System.currentTimeMillis();
+        System.out.println("Nalezení hesla trvalo: " + (end - start) / 1000 + " s");
+    }
 
-            for (int j = zacMnoz; j < konMnoz; j++) { //zanoreny cyklus prirazuje prvky rovnomerne do mnozin
-                outer[i].add(results.get(j));
+    public void zpracuj(ArrayList results) {
+
+        for (int i = 0; i < results.size(); i++) {
+            String md5String = MD5((String) results.get(i));
+            String md5Heslo = MD5(heslo);
+            if (md5String.equals(md5Heslo)) {
+                System.out.println("Naslo se na " + i + ". pozici s hashem " + md5String);
+                break;
             }
-            zacMnoz = zacMnoz + velikostMnoz; //posun o velikostMnoz
-            konMnoz = konMnoz + velikostMnoz; //posun o velikostMnoz
 
-        }
-        for (int i = 0; i < cores; i++) {
-            vlakna[i] = new Vlakno(i + ". vlakno", outer[i]);
-            vlakna[i].start();
         }
 
     }
@@ -67,9 +66,10 @@ public class paralell {
         return null;
     }
 
-    public paralell(int maxDelka, String heslo) {
+    public nonParalell(int maxDelka, String heslo) {
         this.maxDelka = maxDelka;
         this.heslo = heslo;
+
         int i = 0;
         while (i < znaky.length) {
             nextString(new Character(znaky[i]).toString());
