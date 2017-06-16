@@ -21,11 +21,11 @@ public class paralell {
     int maxDelka = 0;
 
     public static void main(String[] args) {
-        paralell b = new paralell(5, "ppcc");
+        paralell b = new paralell(5, "zebra");
         System.out.println("Nase tajne heslo je " + heslo + " s hashem " + MD5(heslo));
 
         System.out.println("V tomto nastaveni existuje " + results.size() + " kombinaci");
-        int cores = 4; //pocet vlaken
+        int cores = 8; //pocet vlaken
 
         int velikostMnoz = results.size() / cores;
 

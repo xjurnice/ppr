@@ -22,7 +22,7 @@ public class nonParalell {
 
     public static void main(String[] args) {
 
-        nonParalell b = new nonParalell(5, "cccc"); //konfigurace - zadavame max. delku retezce a heslo
+        nonParalell b = new nonParalell(5, "zebra"); //konfigurace - zadavame max. delku retezce a heslo
         
         System.out.println("V tomto nastaveni existuje " + results.size() + " kombinaci");
 
